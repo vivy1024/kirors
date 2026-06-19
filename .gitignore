@@ -31,3 +31,9 @@
 .ace-tool/
 .codegraph/
 .claude/
+config/
+data/
+sync_ide_token.py
+*.db
+*.db-shm
+*.db-wal

@@ -1,9 +1,0 @@
-{
-  "adminApiKey": "sk-admin-oDCszkm0jaKyXCh5hd6g9e4J",
-  "apiKey": "sk-kiro-rs-zn8ye3VHAYvdgOqpJY2iXwSV",
-  "defaultEndpoint": "ide",
-  "host": "0.0.0.0",
-  "port": 8990,
-  "region": "us-east-1",
-  "tlsBackend": "rustls"
-}
