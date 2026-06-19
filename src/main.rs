@@ -44,7 +44,7 @@ async fn main() {
     ensure_config_files(&config_path, &credentials_path);
 
     // 加载配置
-    let config = Config::load(&config_path).unwrap_or_else(|e| {
+    let mut config = Config::load(&config_path).unwrap_or_else(|e| {
         tracing::error!("加载配置失败: {}", e);
         std::process::exit(1);
     });
@@ -92,6 +92,22 @@ async fn main() {
 
     // apiKey 仅用于首次启动时 bootstrap 第一条客户端 Key；
     // 后续 /v1 认证全部走客户端 Key 系统。adminApiKey 仍是管理面板登录密钥。
+    // 环境变量 KIRO_RS_API_KEY / KIRO_RS_ADMIN_API_KEY / PORT 优先于 config.json
+    if let Ok(env_api_key) = std::env::var("KIRO_RS_API_KEY") {
+        if !env_api_key.trim().is_empty() {
+            config.api_key = Some(env_api_key);
+        }
+    }
+    if let Ok(env_admin_key) = std::env::var("KIRO_RS_ADMIN_API_KEY") {
+        if !env_admin_key.trim().is_empty() {
+            config.admin_api_key = Some(env_admin_key);
+        }
+    }
+    if let Ok(env_port) = std::env::var("PORT") {
+        if let Ok(p) = env_port.parse::<u16>() {
+            config.port = p;
+        }
+    }
     let bootstrap_key = config.api_key.clone().filter(|k| !k.trim().is_empty());
 
     // 构建代理配置
